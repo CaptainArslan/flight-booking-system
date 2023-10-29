@@ -1,0 +1,185 @@
+<?php 
+	header("Content-type: application/vnd.ms-excel");
+    header("Content-Disposition: attachment; filename=customer_due_balance.xls");
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		body {
+			margin-left: 0px;
+			margin-top: 0px;
+			margin-right: 0px;
+			margin-bottom: 0px;
+		}
+		body,td,th {
+			font-family: "Calibri", Arial, Helvetica, sans-serif;
+		}
+	</style>
+</head>
+<body>
+	<table width="100%" cellpadding="0" cellspacing="0" border="0">
+		<tbody>
+			<tr>
+				<td>&nbsp;</td>
+				<td>
+					<table cellspacing="0" cellpadding="0" width="95%" align="center" border="0">
+						<tbody>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width="70%" style="font-weight: bold;font-size: 20px;" align="left">
+									Customer Due Balance
+								</td>
+								<td width="30%" colspan="2" style="font-weight: bold;font-size: 20px;" align="right">
+									<?php 
+				                        echo($this->session->userdata('user_brand')=='All')?"":$this->session->userdata('user_brand');
+				                    ?>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width="70%">
+									<strong>From : </strong><?php echo date("d-M-Y",strtotime($start_date)); ?>&nbsp;&nbsp;&nbsp;<strong>To : </strong><?php echo date("d-M-Y",strtotime($end_date)); ?>
+								</td>
+								<td colspan="2"><?php echo date("d-M-Y") ;?></td>
+							</tr>
+							<tr>
+								<td width="70%">
+									<strong>Agent : </strong><?php echo $agent; ?>
+								</td>
+								<td colspan="2">&nbsp;</td>
+							</tr>
+							<tr>
+								<td width="70%">
+									<strong>Brand : </strong><?php echo $brand; ?>
+								</td>
+								<td colspan="2">&nbsp;</td>
+							</tr>
+							<tr>
+								<td colspan="3" style="font-size: 16px;"><strong>Issued Bookings</strong></td>
+							</tr>
+							<tr>
+								<td colspan="3">
+									<table cellspacing="0" cellpadding="0" width="100%" style="border: this solid #000;table-layout: fixed;word-wrap:break-word;">
+										<thead>
+											<tr>
+							                    <th align="center" width="05%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	#
+							                    </th>
+							                    <th align="center" width="08%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	Issue
+							                    </th>
+							                    <th align="center" width="08%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	Agent
+							                    </th>
+							                    <th align="center" width="10%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	Brand
+							                    </th>
+							                    <th align="center" width="08%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	Bkg Id
+							                    </th>
+							                    <th align="center" width="15%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	Supp. Ref
+							                    </th>
+							                    <th align="center" width="06%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	PNR
+							                    </th>
+							                    <th align="center" width="20%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	Customer Name
+							                    </th>
+							                    <th align="center" width="10%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	Balance Due
+							                    </th>
+							                    <th align="center" width="10%" bgcolor="#039be0" style="color:#ffffff;border: thin solid #bbbbbb">
+							                    	Profit
+							                    </th>
+							                </tr>
+										</thead>
+										<tbody>
+							                <?php 
+							                    $sr = 1;
+							                    $total_cust_due = 0;
+							                    $total_profit = 0;
+							                    $issueances = $report_details['issued_booking'];
+							                    foreach ($issueances as $key => $issue) {
+							                        $amt_balance = Getcustreceived($issue['bkg_no']);
+							                        $sale = $issue['saleprice'] ;
+							                        $amt_due = round($sale,2) - round($amt_balance,2);
+							                        if($amt_due == 0){
+							                            continue;
+							                        }
+							                        $total_cust_due += $amt_due;
+							                        $supplier = $issue['bkg_cost'] ;
+							                        $add_cost = $issue['admin_exp'] ;
+							                        $cost = $supplier+$add_cost;
+							                        $profit = $sale - $cost;
+							                        $total_profit += $profit;
+							                ?>
+							                <tr bgcolor="#fff">
+							                    <td align="center" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                    	<?php echo $sr; ?>
+							                    </td>
+							                    <td align="center" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                    	<?php echo date('d-M-y',strtotime($issue['clr_date'])) ;?>
+							                    </td>
+							                    <td align="center" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                    	<?php remove_space($issue['bkg_agent']); ?>
+							                    </td>
+							                    <td align="center" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                    	<?php remove_space($issue['bkg_brandname']); ?>
+							                    </td>
+							                    <td align="center" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                        <a class="font-weight-bold text-blue" href="<?php echo base_url("booking/issued/".hashing($issue['bkg_no'])) ?>"><?php echo $issue['bkg_no']; ?></a>
+							                    </td>
+							                    <td align="center" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                    	<?php custom_echo($issue['bkg_supplier_reference'],15) ; ?>
+							                    </td>
+							                    <td align="center" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                    	<?php echo $issue['flt_pnr']; ?>
+							                    </td>
+							                    <td align="left" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                    	<?php custom_echo($issue['cst_name'],25) ; ?>
+							                    </td>
+							                    <td align="right" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                    	<?php echo number_format($amt_due,2) ; ?>
+							                    </td>
+							                    <td align="right" style="border-bottom: thin solid #bbbbbb;font-size: 15px;">
+							                    	<?php echo number_format($profit,2) ; ?>
+							                    </td>
+							                </tr>
+							                <?php 
+							                    $sr++;
+							                    }
+							                ?>
+							            </tbody>
+							            <tfoot>
+							                <tr bgcolor="#fff">
+							                    <th align="right" style="font-size:14px;border: thin solid #bbbbbb;" bgcolor="#f5f5f5" colspan="8">Total</th>
+							                    <th align="right" style="font-size:15px;border: thin solid #bbbbbb;" bgcolor="#f5f5f5">
+							                    	<?php echo number_format($total_cust_due,2) ; ?>&nbsp;
+							                    </th>
+							                    <th align="right" style="font-size:15px;border: thin solid #bbbbbb;" bgcolor="#f5f5f5">
+							                    	<?php echo number_format($total_profit,2) ; ?>&nbsp;
+							                    </th>
+							                </tr>
+							            </tfoot>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+				<td>&nbsp;</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
