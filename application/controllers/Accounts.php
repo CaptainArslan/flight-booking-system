@@ -55,7 +55,7 @@ class Accounts extends PL_Controller
 	}
 	public function new_transaction_modal()
 	{
-		die('here');
+		// die('here');
 		$user_role = $this->session->userdata('user_role');
 		if (checkAccess($user_role, 'add_transaction')) {
 			$data = $this->input->get();

@@ -24,6 +24,7 @@ class Invoice extends PL_Controller
 		$access = checkBrandaccess($inv['booking']['bkg_brandname'], 'invoice');
 		if ($access) {
 			$inv['token'] = _crypt($token);
+			$inv['bkg_no'] = $bkg_no = hashing($inv['booking']['bkg_no']);
 			$inv['from'] = $from = agentbookingemail($bkg_id);
 			$inv['from_name'] = $from_name = $inv['booking']['bkg_agent'];
 			$inv['to'] = $to = $inv['booking']['cst_email'];

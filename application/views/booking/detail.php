@@ -67,40 +67,11 @@
 
 <body class="antialiased">
     <div class="wrapper">
-        <?php
-        $this->load->view('common/sidebar', @$sidebar);
-        $this->load->view('common/header', @$header);
-        ?>
         <div class="page-wrapper">
-            <div class="page-header bg-white m-0 pt-3 pb-2">
-                <div class="container-xl">
-                    <div class="row align-items-center">
-                        <div class="col-auto">
-                            <div class="page-pretitle"><?php echo $booking['bkg_status']; ?></div>
-                            <h2 class="page-title">Invoice # <?php echo $booking['bkg_no'] . '-' . $brand["brand_pre_post_fix"]; ?></h2>
-                        </div>
-                        <div class="col-auto ms-auto">
-                            <?php if (checkBrandaccess($booking['bkg_brandname'], 'invoice')) { ?>
-                                <button class="invoicesend btn btn-sm btn-success"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <rect x="3" y="5" width="18" height="14" rx="2" />
-                                        <polyline points="3 7 12 13 21 7" />
-                                    </svg> Send Invoice</button>
-                            <?php } ?>
-                            <button id="print" class="btn btn-default btn-outline btn-sm" type="button"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M17 17h2a2 2 0 0 0 2 -2v-4a2 2 0 0 0 -2 -2h-14a2 2 0 0 0 -2 2v4a2 2 0 0 0 2 2h2"></path>
-                                    <path d="M17 9v-4a2 2 0 0 0 -2 -2h-6a2 2 0 0 0 -2 2v4"></path>
-                                    <rect x="7" y="13" width="10" height="8" rx="2"></rect>
-                                </svg> Print Invoice</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="page-body">
                 <div class="container-xl">
                     <div class="row">
-                        <div class="col" id="printThis">
+                        <div class="col" id="printThis">    
                             <page>
                                 <table width="100%" cellpadding="0" cellspacing="0" bgcolor="#ffffff">
                                     <tr>
@@ -914,45 +885,6 @@
             window.print();
             document.body.innerHTML = originalContents;
         });
-
-
-        $(document).on('click', '#print', function() {
-            var printContents = document.getElementById('printThis').innerHTML;
-            var originalContents = document.body.innerHTML;
-
-            // Create a new window for printing
-            var printWindow = window.open('', '_blank');
-
-            // Set the content of the new window
-            printWindow.document.body.innerHTML = printContents;
-
-            // Append a style tag with print-specific styles
-            var style = printWindow.document.createElement('style');
-            style.innerHTML = `
-                @media print {
-                    body {
-                        margin: 0;
-                    }
-                    @page {
-                        size: auto;
-                        margin: 0;
-                    }
-                }
-            `;
-            printWindow.document.head.appendChild(style);
-
-            // Print the content
-            printWindow.print();
-
-            // Close the new window after printing
-            printWindow.close();
-
-            // Restore the original content to the main window
-            document.body.innerHTML = originalContents;
-        });
-
-
-
         $(document).on('click', '.invoicesend', function() {
             var thishtml = $(this).html();
             var thismain = $(this);

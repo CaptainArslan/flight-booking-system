@@ -1,4 +1,5 @@
 var base_url = window.location.origin;
+// alert(base_url);
 $(document).on('click','.bkgNewTrans',function (){
     var thismain = $(this) ;
     thismain.attr("disabled","disabled");

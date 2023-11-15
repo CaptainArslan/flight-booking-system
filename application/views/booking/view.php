@@ -1273,7 +1273,9 @@ Thanks.";
                                     }
                                     if (($booking['bkg_status'] != 'Issued' && $booking['bkg_status'] != 'Cancelled') && (checkAccess($user_role, 'add_transaction') || checkAccess($user_role, 'edit_transaction') || checkAccess($user_role, 'delete_transaction'))) {
                                     ?>
-                                        <button type="button" data-bkg-no="<?php echo $booking['bkg_no']; ?>" class="btn btn-xs btn-info btn-sm bkgNewTrans ms-auto p-1"><small>Add Transaction</small></button>
+                                        <button type="button" data-bkg-no="<?php echo $booking['bkg_no']; ?>" class="btn btn-xs btn-info btn-sm bkgNewTrans ms-auto p-1">
+                                            <small>Add Transaction</small>
+                                        </button>
                                     <?php } ?>
                                 </div>
                                 <div class="card-body p-0">
@@ -1761,6 +1763,7 @@ Thanks.";
                                                             <tbody>
                                                                 <?php
                                                                 foreach ($inv as $key => $invc) {
+
                                                                 ?>
                                                                     <tr>
                                                                         <td class="text-center text-middle">
@@ -1833,7 +1836,7 @@ Thanks.";
                                                                             <?php } elseif ($invc['status'] == 'Declined') {
                                                                                 echo "-";
                                                                             } else { ?>
-                                                                                <a target="_blank" href="<?php echo $this->link_esign; ?>/invoice/<?php echo $invc['access_token'] ?>" class="btn btn-xs btn-sm btn-info">View Doc</a>
+                                                                                <a target="_blank" href="<?php echo $this->link_esign; ?>/invoice_detail/detail/<?php echo hashing($invc['bkgno']) ?>" class="btn btn-xs btn-sm btn-info">View Doc</a>
                                                                             <?php } ?>
                                                                         </td>
                                                                     </tr>

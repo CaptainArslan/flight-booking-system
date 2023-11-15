@@ -21,7 +21,8 @@ class PL_Controller extends CI_Controller
         $this->mail_payments_title = "Payments RR Travels";
         $this->link_web = "https://rrtravels.co.uk";
         $this->link_review_trustpilot = "rrtravels.co.uk+1b8da91203@invite.trustpilot.com";
-        $this->link_esign = "http://esign.rrtravels.co.uk";
+        // $this->link_esign = "http://esign.rrtravels.co.uk";
+        $this->link_esign = "http://localhost/booking";
         if (checkLogin()) {
             $profile = profileDetails();
             $this->user_profile_id = $profile['user_id'];
